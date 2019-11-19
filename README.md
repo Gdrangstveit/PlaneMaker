@@ -1,7 +1,7 @@
 # PlaneMaker
 Read Me File for Plane Maker 2
 
-Plane Maker calculates performance aspects of an aircraft using basic design parameters. The user can input information in lines 29-85.
+Plane Maker calculates performance aspects of a jet aircraft using basic design parameters. The user can input information in lines 29-85.
 From there the code will process the data and perform the necessary calculations. Then, outputs are delivered in the terminal. This program
 has a special design subroutine. This subroutine takes the data you've entered and uses it to come up with a very accurate weight estimate.
 It does this using a empty weight fraction that has been determined from historical trends. The subroutine outputs recomended weights,
