@@ -12,7 +12,7 @@ Steps:
 1) Find file for airfoil information
 2) Process file for program reading (explained below)
 3) Open program in an IDE
-4) Enter all the information for your aircraft in imperial units
+4) Enter all the information for your aircraft in imperial units (for some unknown values enter info for a similar aircraft)
 5) To use the Design Mode, change the boolean next to 'RunSysDesign' to True
 6)Run the program
 7) Enter the values given by the Design Mode
