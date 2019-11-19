@@ -6,11 +6,12 @@ From there the code will process the data and perform the necessary calculations
 has a special design subroutine. This subroutine takes the data you've entered and uses it to come up with a very accurate weight estimate.
 It does this using a empty weight fraction that has been determined from historical trends. The subroutine outputs recomended weights,
 airspeeds, and ensures landing location is ok. This subroutine is toggleable using a boolean in a design mode controls input section.
+Make sure to open this program using an IDE, it currently does not support terminal input nor does it have a UI.
 
 Steps:
 1) Find file for airfoil information
 2) Process file for program reading (explained below)
-3) Open program
+3) Open program in an IDE
 4) Enter all the information for your aircraft in imperial units
 5) To use the Design Mode, change the boolean next to 'RunSysDesign' to True
 6)Run the program
