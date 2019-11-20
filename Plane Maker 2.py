@@ -14,10 +14,11 @@ import matplotlib.pyplot as plt
 
 #PLANE MAKER 2
 #CREATED BY GUNNAR DRANGSTVEIT
-#v<2.4.1>
+#v<2.4.2>
 
 #Read the ReadMe file that came with this program for instructions and related information.
-#Design Mode: Change 'RunSysDesign' to 'True' if you wish to use Design Mode, and 'False' if you do not
+#Design Mode: Change 'RunSysDesign' to 'True' if you wish to use Design Mode, and 'False' if you do not.
+#Output Modes: Change 'AbridgedOutputs' to 'True' if you want shorter outputs, and 'False' if you do not.
 
 
 # USER INPUTS (ENTER ALL IN DESIGNATED IMPERIAL UNITS):
@@ -25,60 +26,62 @@ import matplotlib.pyplot as plt
 
 
 #fuselage dimensions
-FuselageLength = 232 #ft
-FuselageDiameter = 20 #ft
+FuselageLength = 123 #ft
+FuselageDiameter = 123 #ft
 
 #wing dimensions
-RootChord = 29 #ft
-TipChord = 6 #ft
-WingSpan = 174 #ft
-SweepAngle = 22 #deg
-LocationOfMaxThickness = 0.35 #unitless
-MaxThickness = 0.113 #unitless
+RootChord = 123 #ft
+TipChord = 123 #ft
+WingSpan = 123 #ft
+SweepAngle = 123 #deg
+LocationOfMaxThickness = 0.123 #unitless
+MaxThickness = 0.123 #unitless
 
 #file containing lift coifficients and AoA's
 FileName = 'C:/Users/drago/Documents/Python Scripts/BACXXX_RE1milN9.txt' #Change instances of '\' to '/'
 
 #cruise phase informations
-CruiseAltitude = 30000 #ft
-CruiseAirspeed = 832 #fps
-FlightRange = 2756 #mi
+CruiseAltitude = 12345 #ft
+CruiseAirspeed = 123 #fps
+FlightRange = 1234 #mi
 
 #aircraft weight information
-WeightOfFuselage = 217570 #lb
+WeightOfFuselage = 123456 #lb
 WeightOfPerson = 170 #lb
-WeightOfCargo = 50000 #lb
-WeightOfFuel = 118377 #lb
-WeightOfFuelReserve = 28841 #lb
-WeightOfEngines = 8675 #lb
+WeightOfCargo = 12345 #lb
+WeightOfFuel = 123456 #lb
+WeightOfFuelReserve = 12345 #lb
+WeightOfEngines = 1234 #lb
 
 #onboard quantities
-People = 200 #people
-Engines = 4 #unitless
+People = 123 #people
+Engines = 1 #unitless
 
-#jet engine information (LEAP-1C)
-EngineThrust = 29950 #lb (per engine)
-SpecificFuelConsumption = 0.51 #1/hr
-ReverseThrust = 15000 #lb
+#jet engine information
+EngineThrust = 12345 #lb (per engine)
+SpecificFuelConsumption = 0.123 #1/hr
+ReverseThrust = 12345 #lb
+EngineLength = 12 #ft
+EngineDiameter = 12 #ft
 
 #information of takeoff, climb, and landing locations
-TakeoffAltitude = 2181 #ft (Las Vegas KLAS)
-TakeoffRunwayLength = 14515 #ft (8L/26R)
+TakeoffAltitude = 0 #ft
+TakeoffRunwayLength = 12345 #ft
 ClimbStep = 1000 #ft (sets accuracy of climb sim)
-UnpoweredTestAltitude = 30000 #ft
-LandingAltitude = 13.12 #ft (Honolulu PHNL)
-LandingRunwayLength = 12312 #ft (8L/26R)
+UnpoweredTestAltitude = 12345 #ft
+LandingAltitude = 0 #ft
+LandingRunwayLength = 12345 #ft
 PilotReactionTime = 3 #sec
-LandingLiftCoefficentWithFlaps = 2.97 #unitless (assumes 3 slot fowler flaps & slats)
-TakeoffLiftCoefficientWithFlaps = 2.23 #unitless (assumes 3 slot fowler flaps & slats)
+LandingLiftCoefficentWithFlaps = 1.23 #unitless
+TakeoffLiftCoefficientWithFlaps = 1.23 #unitless
 
 #iterative Design Mode controls
 RunSysDesign = False #boolean (True or False)
 WeightAccuracy = 0.001 #lb (lower than 0.001 may take long run times)
-EmptyWeightRatio = 0.45 #unitless (Found in Conceptual Design Textbook)
+EmptyWeightRatio = 0.123 #unitless (Found in Conceptual Design Textbook)
 
 #output controls
-AbridgedOutputs = True #boolean (True or False)
+AbridgedOutputs = False #boolean (True or False)
 
 
 
@@ -223,6 +226,7 @@ def GetDensity(alti):
 #Reynolds Number of wing and fuselage
 Rewing = (GetDensity(CruiseAltitude)*CruiseAirspeed*chord)/0.000000374
 Refuselage = (GetDensity(CruiseAltitude)*CruiseAirspeed*FuselageLength)/0.000000374
+Renacelle = (GetDensity(CruiseAltitude)*CruiseAirspeed*EngineLength)/0.000000374
 #speed of sound at cruise altitude
 SoS = math.sqrt(1.4*1716*GetTemperature(CruiseAltitude))
 #mach number
@@ -233,21 +237,29 @@ turbflow = (0.455/pow(math.log10(Rewing),2.58))*(1/pow((1+0.144*pow(mach,2)),0.6
 cfwing = (0.1*lamflow)+(0.9*turbflow)
 #coefficient of friction for fuselage
 cffuselage  = (0.455/pow(math.log10(Refuselage),2.58))*(1/pow((1+0.144*pow(mach,2)),0.65))
+#coefficient of friction for the engine nacelle
+cfnacelle  = (0.455/pow(math.log10(Renacelle),2.58))*(1/pow((1+0.144*pow(mach,2)),0.65))
 #form factor for wing
 FFwing = (1+(0.6/LocationOfMaxThickness)*(MaxThickness)+100*pow(MaxThickness,4))*(1.34*pow(mach,0.18)*pow(math.cos(math.radians(SweepAngle)),0.28))
 #form factor of fuselage
-f = FuselageLength/FuselageDiameter
-FFfuselage = 0.9 + (5/pow(f,1.5))+(f/400)
+ffuselage = FuselageLength/FuselageDiameter
+FFfuselage = 0.9 + (5/pow(ffuselage,1.5))+(ffuselage/400)
+#form factor for engine nacelle
+fnacelle = EngineLength/math.sqrt((4/3.14159)*(3.14159*pow(FuselageDiameter/2,2)))
+FFnacelle = 1+(0.35/fnacelle)
 #wing area
 S = WingSpan*chord
 #surface area of fuselage
 SAcone = 3.14159*(FuselageDiameter/2)*((FuselageDiameter/2)+math.sqrt(pow((FuselageLength*0.1),2)+pow(FuselageDiameter/2,2)))
 SAcylinder = 2*3.14159*(FuselageDiameter/2)*(FuselageLength*0.9)
 Swet = SAcone + SAcylinder
+#surface area of nacelle
+SAnacelle = (2*3.14159*(EngineDiameter/2)*(EngineLength))+(2*3.14159*pow(EngineDiameter/2,2))
 #no lift drag
-cd0wing = (cfwing*FFwing*2*2)
-cd0fuselage = (cffuselage*FFfuselage*1*(Swet/S))
-cd0 = cd0wing + cd0fuselage
+cd0wing = (cfwing*FFwing*1.5*2)
+cd0fuselage = (cffuselage*FFfuselage*1.5*(Swet/S))
+cd0nacelle = (cfnacelle*FFnacelle*1.5*(SAnacelle/S))
+cd0 = cd0wing + cd0fuselage + cd0nacelle
 
 #creates values for loop
 m = 0
@@ -625,6 +637,8 @@ elif RunSysDesign == False:
     Eavg = Wavg/Treqavg
     #best range velocity
     Vbr = math.sqrt(((2*(Wstartcruise/S))/GetDensity(CruiseAltitude))*math.sqrt((3*K)/cd0))
+    #finds weight of wing
+    Wwing = (0.0051*pow(Weight*3.84,0.557)*pow(S,0.649)*pow(AR,0.5)*pow(1+(TipChord/RootChord),0.1)*pow(S*0.1,0.1))/(pow(MaxThickness,0.4)*pow(math.cos(math.radians(SweepAngle)),1))
     
     
     
@@ -845,9 +859,9 @@ elif RunSysDesign == False:
         #prints AoA where lift is zero
         print('Zero Lift AoA:\n',round(a0,2),'deg') 
         #prints slope of airfoil lift curve
-        print('Slope Of Airfoil Lift Curve:\n',round(a_0,2),'1/deg')
+        print('Slope Of Airfoil Lift Curve:\n',round(a_0,3),'1/deg')
         #prints slope of wing lift curve
-        print('Slope of Wing Lift Curve:\n',round(a,2),'1/deg')
+        print('Slope of Wing Lift Curve:\n',round(a,3),'1/deg')
         
         #prints section header
         print('\nWING INFORMATION')
@@ -858,7 +872,7 @@ elif RunSysDesign == False:
         #prints taper ratio
         print('Taper Ratio:\n',round(TipChord/RootChord,2))
         #prints wing zero lift coefficient
-        print('Wing Zero Lift Drag:\n',round(cd0wing,2))
+        print('Wing Zero Lift Drag:\n',round(cd0wing,3))
         #prints oswald efficiency factor
         print('Oswald Efficiency Factor:\n',round(OEF,2))
         #prints wing mount angle
@@ -867,13 +881,15 @@ elif RunSysDesign == False:
         print('Lift Coefficient for Max Efficiency:\n',round(CLEM,2))
         #prints angle of attack for max aerodynamic efficiency
         print('AoA for Max Efficiency:\n',round(aEM,2),'deg')
+        #prints wing weight
+        print('Total Wing Weight:\n',round(Wwing,2),'lb')
         
         #prints section header
         print('\nFUSELAGE INFORMATION')
         #prints wetted surface area of fuselage
         print('Wetted Fuselage Surface:\n',round(Swet,2),'ft^2')
         #prints fuselage zerolift drag coefficient
-        print('Fuselage Zero Lift Drag:\n',round(cd0fuselage,2))
+        print('Fuselage Zero Lift Drag:\n',round(cd0fuselage,3))
         
         #prints section header
         print('\nAIRCRAFT INFORMATION')
@@ -884,6 +900,8 @@ elif RunSysDesign == False:
         print('Total Aircraft Weight:\n',round(Weight,2),'lb')
         #prints maximum efficiency
         print('Maximum Efficiency:\n',round(Emax,2))
+        #prints zero lift drag for engine nacelle
+        print('Nacelle Zero Lift Drag:\n',round(cd0nacelle,3))
         
         
         # Take off Output:
@@ -983,7 +1001,7 @@ elif RunSysDesign == False:
         #prints touchdown velocity
         print('Touchdown Velocity:\n',round(Vtouchdown,2),'fps')
         #prints JA
-        print('JA:\n',round(JA,2))
+        print('JA:\n',round(JA,9))
         #prints JT
         print('JT:\n',round(JT,2))
         #prints free roll distance
