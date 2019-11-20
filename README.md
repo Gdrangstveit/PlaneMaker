@@ -1,7 +1,7 @@
 # PlaneMaker
 Read Me File for Plane Maker 2
 
-Plane Maker calculates performance aspects of a jet aircraft using basic design parameters. The user can input information in lines 29-85.
+Plane Maker calculates performance aspects of a jet aircraft using basic design parameters. The user can input information in a designated area/
 From there the code will process the data and perform the necessary calculations. Then, outputs are delivered in the terminal. This program
 has a special design subroutine. This subroutine takes the data you've entered and uses it to come up with a very accurate weight estimate.
 It does this using a empty weight fraction that has been determined from historical trends. The subroutine outputs recomended weights,
@@ -13,14 +13,15 @@ Steps:
 2) Process file for program reading (explained below)
 3) Open program in an IDE
 4) Enter all the information for your aircraft in imperial units (for some unknown values enter info for a similar aircraft)
-5) To use the Design Mode, change the boolean next to 'RunSysDesign' to True
-6)Run the program
+5) To use the Design Mode, change the boolean next to 'RunSysDesign' to True (if not skip steps 6-9)
+6) Run the program
 7) Enter the values given by the Design Mode
 8) Rerun Design Mode to ensure accuracy
 9) Change the boolean next to 'RunSysDesign' to false
-10) Run the program
-11) Evaluate the outputs and make changes to your aircraft as needed.
-12) If you encounter any issues, report them to gjdrangstveit@gmail.com with subject 
+10) Set 'AbridgedOutputs' to 'False' for long outputs or 'True' for short outputs
+11) Run the program
+12) Evaluate the outputs and make changes to your aircraft as needed.
+13) If you encounter any issues, report them to gjdrangstveit@gmail.com with subject 
 'Plane Maker 2 Issue'
 
 Airfoil File:
@@ -34,9 +35,9 @@ of attack on the left and lift coefficients on the right seperated by commas. Ex
 -8.5,-0.5974
 When inputting the file location into the program, be sure to change an instances of '\' to '/'. If this step is not done the code will not
 be able to access the file. Example:
-C:\Users\mainuser\Documents\PythonStuff\Airfoil.txt
+'C:\Users\mainuser\Documents\PythonStuff\Airfoil.txt'
 becomes
-C:/Users/mainuser/Documents/PythonStuff/Airfoil.txt
+'C:/Users/mainuser/Documents/PythonStuff/Airfoil.txt'
 
 Empty Weight Ratio:
 Below is a list of ratios taken from Aircraft Design: A Conceptual Approach.
@@ -56,7 +57,7 @@ Military cargo/bomber:            0.350-0.445
 Jet transport:                    0.450-0.555
 
 Use a ratio within the range given for the type of aircraft you are designing. If you expect your aircraft to be lighter, use the smaller
-value or the larger value for larger weights.
+value or the larger value for larger weights. Otherwise use the average of the range.
 Input this value for 'EmptyWeightRatio'.
 
 Lift Coefficient With Flaps:
