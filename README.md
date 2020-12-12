@@ -21,8 +21,6 @@ Steps:
 10) Set 'AbridgedOutputs' to 'False' for long outputs or 'True' for short outputs
 11) Run the program
 12) Evaluate the outputs and make changes to your aircraft as needed.
-13) If you encounter any issues, report them to gjdrangstveit@gmail.com with subject 
-'Plane Maker 2 Issue'
 
 Airfoil File:
 When importing a file for containing airfoil data, it must follow a certain format. All values should be arranged in columns, with angle
